@@ -1,0 +1,79 @@
+# ==========================================
+# Compiled Binaries & Object Files
+# ==========================================
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.obj
+*.so
+*.dylib
+*.out
+*.app
+
+# ==========================================
+# Build Directories
+# ==========================================
+# Common C++ build outputs
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[XxEe]64/
+[XMetrics]/
+cmake-build-*/
+
+# ==========================================
+# IDEs and Text Editors
+# ==========================================
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.db
+*.opendb
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# CLion / JetBrains
+.idea/
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+
+# ==========================================
+# Dependency & Package Managers
+# ==========================================
+# vcpkg & Conan defaults
+vcpkg_installed/
+conan/
+.conan/
+
+# Local third-party directory overrides
+# (Uncomment if you download SDL/GLAD binaries manually to these folders)
+# third_party/bin/
+# third_party/lib/
+
+# ==========================================
+# Graphics & OS Temporary Files
+# ==========================================
+# Shader compilation caches or dump files
+*.spv
+*.spirv
+*.glsl.bin
+
+# OS specific files
+.DS_Store
+Thumbs.db
+build
