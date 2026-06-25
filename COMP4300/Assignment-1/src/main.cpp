@@ -4,6 +4,9 @@
 
 #include <SDL2/SDL.h>
 
+const int WINDOW_WIDTH = 1080;
+const int WINDOW_HEIGHT = 720;
+
 class Shape
 {
 public:
@@ -15,7 +18,13 @@ public:
     int blue;
     int alpha;
 
-    virtual void Draw(SDL_Renderer *renderer) = 0;
+    int vx;
+    int vy;
+
+    bool isMoving = false;
+
+    virtual void
+    Draw(SDL_Renderer *renderer) = 0;
 };
 
 class Circle : public Shape
@@ -23,11 +32,13 @@ class Circle : public Shape
 public:
     int radius;
 
-    Circle(int cx, int cy, int radius, int red, int blue, int green, int alpha)
+    Circle(int cx, int cy, int radius, int red, int blue, int green, int alpha, int vx, int vy)
     {
         this->radius = radius;
         this->cx = cx;
         this->cy = cy;
+        this->vx = vx;
+        this->vy = vy;
         this->red = red;
         this->blue = blue;
         this->green = green;
@@ -49,12 +60,41 @@ public:
         }
     }
 
-    void Move(int vx, int vy)
+    void Move()
     {
         // now i need to learn collision detection
+
         this->cx += vx;
         this->cy += vy;
+
+        // LEFT
+        if (this->cx - this->radius <= 0)
+        {
+            vx = -vx;
+        }
+
+        // RIGHT
+        if (this->cx + this->radius >= WINDOW_WIDTH)
+        {
+            vx = -vx;
+        }
+
+        // TOP
+        if (this->cy - this->radius <= 0)
+        {
+            vy = -vy;
+        }
+
+        // DOWN
+        if (this->cy + this->radius >= WINDOW_HEIGHT)
+        {
+            vy = -vy;
+        }
     }
+};
+
+class Rectangle : public Shape
+{
 };
 
 int main(int argc, char const *argv[])
@@ -83,7 +123,7 @@ int main(int argc, char const *argv[])
     }
 
     // Circle
-    Circle c1(100, 100, 50, 255, 0, 0, 255);
+    Circle c1(100, 100, 50, 255, 0, 0, 255, 1, 1);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -113,12 +153,16 @@ int main(int argc, char const *argv[])
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Circle Controls");
+        ImGui::Begin("Shape Controller");
 
         ImGui::SliderInt("Radius", &c1.radius, 1, 300);
+        ImGui::Checkbox("Move", &c1.isMoving);
 
-        ImGui::SliderInt("Center X", &c1.cx, 0, 1080);
-        ImGui::SliderInt("Center Y", &c1.cy, 0, 720);
+        ImGui::SliderInt("Center X", &c1.cx, 0 + c1.radius, 1080 - c1.radius);
+        ImGui::SliderInt("Center Y", &c1.cy, 0 + c1.radius, 720 - c1.radius);
+
+        ImGui::SliderInt("VX", &c1.vx, -10, 10);
+        ImGui::SliderInt("VY", &c1.vy, -10, 10);
 
         ImGui::SliderInt("Red", &c1.red, 0, 255);
         ImGui::SliderInt("Green", &c1.green, 0, 255);
@@ -134,7 +178,11 @@ int main(int argc, char const *argv[])
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
 
         c1.Draw(renderer);
-        // c1.Move(1, 1);
+
+        if (c1.isMoving)
+        {
+            c1.Move();
+        }
 
         SDL_RenderPresent(renderer);
     }
